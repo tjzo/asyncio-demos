@@ -3,21 +3,17 @@ version: "3.8"
 x-superbase: &default-base
   build: ./
   image: niopy:latest
+  command:
+    - bash
+    - -c
+    - "exec gunicorn -t 120 -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --access-logfile - main:app"
 
 services:
-  slow:
+  worker:
     <<: *default-base
-    command:
-      - bash
-      - -c
-      - "exec uvicorn main:app --port 8000 --host 0.0.0.0"
   manager:
     <<: *default-base
-    command:
-      - bash
-      - -c
-      - "exec uvicorn main2:app --port 8000 --host 0.0.0.0"
     ports:
       - 5002:8000
     environment:
-      REMOTE_ADDR: "http://slow:8000/ping"
+      REMOTE_ADDR: "http://worker:8000/worker"

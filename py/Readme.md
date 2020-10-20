@@ -7,6 +7,6 @@ docker-compose up -d
 # 查看日志
 docker-compose logs -f
 # 访问地址
-curl http://127.0.0.1:5002/ping
+curl http://127.0.0.1:5002/manager
 
 ```
