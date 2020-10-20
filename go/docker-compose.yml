@@ -1,0 +1,13 @@
+version: "3.8"
+
+x-superbase: &default-base
+  build: ./
+  image: niogo:build
+
+services:
+  worker:
+    <<: *default-base
+  manager:
+    <<: *default-base
+    ports:
+      - 5003:8000
