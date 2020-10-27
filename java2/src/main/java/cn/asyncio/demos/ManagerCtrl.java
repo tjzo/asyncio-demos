@@ -28,9 +28,8 @@ public class ManagerCtrl {
 
     @GetMapping("/manager")
     public Flux<String> get() throws IOException {
+        WebClient client = WebClient.create(remoteAddr);
         return Flux.fromStream(LongStream.range(0, 100).boxed())
-                .flatMap(i -> WebClient.create(remoteAddr).get()
-                        .retrieve()
-                        .bodyToMono(String.class));
+                .flatMap(i -> client.get().retrieve().bodyToMono(String.class));
     }
 }
