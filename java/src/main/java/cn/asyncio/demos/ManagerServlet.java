@@ -36,10 +36,6 @@ public class ManagerServlet extends HttpServlet {
         }
     }
 
-    static {
-        System.getenv().entrySet().forEach(k -> System.out.println(k.getKey() + ": " + k.getValue()));
-    }
-
     @Inject
     NioAsyncHttpClient client;
 
@@ -84,6 +80,10 @@ public class ManagerServlet extends HttpServlet {
             latch.await();
         } catch (Exception e) {
             LOG.error(e);
+        }
+
+        if (result.stream().anyMatch(i -> i != 200)) {
+            response.sendError(result.stream().filter(i -> i != 200).findFirst().orElse(500));
         }
 
         PrintWriter out = response.getWriter();

@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  worker:
+    image: niogo:build
+    build: ../go/
+  manager:
+    build: ./
+    image: niojava2:build
+    ports:
+      - 5004:8080
+    environment:
+      REMOTE_ADDR: "http://worker:8000/worker"
